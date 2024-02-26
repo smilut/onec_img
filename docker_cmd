@@ -1,0 +1,6 @@
+docker build -t onec_cli .
+docker run -d -p 2022:22 -p 15901:5901 --hostname test1 --name onec_test onec_cli
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' onec_test
+
+# в параметрах вызова ванессы попробовать использовать
+GlobalVars={"ИмяПеременной1":"Значение","ИмяПеременной2":"Значение"}
