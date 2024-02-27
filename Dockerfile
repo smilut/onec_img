@@ -18,6 +18,9 @@ COPY config/passwd /home/jenkins/.vnc/passwd
 RUN chown -R jenkins:jenkins /home/jenkins/.vnc
 RUN chmod -R u=rwx /home/jenkins/.vnc
 COPY test_start.sh /home/jenkins/onec_start.sh
+RUN chown -R jenkins:jenkins /home/jenkins/onec_start.sh
+RUN chmod -R u=rwx /home/jenkins/onec_start.sh
+
 
 # устанавливаем пакеты для клиента 1С
 RUN echo "Installing libraries for 1C"
@@ -35,7 +38,8 @@ RUN apt-get install -y ttf-mscorefonts-installer fontconfig \
     fc-cache; \
     cp /usr/lib/x86_64-linux-gnu/libenchant-2.so.2 /usr/lib/x86_64-linux-gnu/libenchant.so.1
 
-RUN echo 'ru_RU UTF-8' >> /etc/locale.gen; locale-gen; update-locale
+RUN echo ru_RU.UTF-8 UTF-8 >> /etc/locale.gen
+RUN locale-gen; update-locale; echo LANG=ru_RU.UTF-8 > /etc/default/locale
 
 # устанавливаем локаль для установки 1С с русским интерфейсом
 ENV LANG ru_RU.UTF-8
@@ -61,7 +65,7 @@ RUN apt-get install -y tightvncserver
 
 # устанавливаем пакеты для отладки образа
 RUN echo "Installing components for img debug"
-RUN apt-get install -y aptitude mc nano
+RUN apt-get install -y aptitude mc nano iputils-ping
 
 # настраиваем и стартуем ssh
 RUN echo "Start sshd for Jenkins chanel"
